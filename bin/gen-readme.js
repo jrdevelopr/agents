@@ -50,11 +50,15 @@ isolate separate Claude/agent subscriptions per project. *Mobile* ✅ = app or m
 `;
 
 const m = cell => MARK[(cell||{s:'no'}).s] || MARK.no;
-const cols = ['#','Platform','Cost','Self-hosted','GitHub Issues','GH Projects','PRs / push','One-click shell',
-  'Multiple logins','Mobile','Agents / models','Bottom line'];
+const stars = n => n==null ? '—'
+  : n>=1e6 ? (n/1e6).toFixed(1).replace(/\.0$/,'')+'M'
+  : n>=1e4 ? Math.round(n/1e3)+'k'
+  : n>=1e3 ? (n/1e3).toFixed(1).replace(/\.0$/,'')+'k' : ''+n;
+const cols = ['#','Platform','★ Stars','Cost','Self-hosted','GitHub Issues','GH Projects','PRs / push','One-click shell',
+  'Multiple logins','Mobile','Agents / models','Bottom line (what users say)'];
 let rows = `| ${cols.join(' | ')} |\n|${cols.map(()=>'---').join('|')}|\n`;
 P.forEach((p, i) => {
-  rows += `| ${i+1} | **[${esc(p.name)}](${p.url})** | ${cost(p.cost)} | ${m(p.selfHosted)} | ${m(p.ghIssues)} | ${m(p.ghProjects)} | ${m(p.prs)} | ${m(p.shell)} | ${m(p.multi)} | ${m(p.mobile)}<br><sub>${esc(p.mobile.note)}</sub> | ${esc(p.agents)} | ${esc(p.verdict)} |\n`;
+  rows += `| ${i+1} | **[${esc(p.name)}](${p.url})** | ${stars(p.stars)} | ${cost(p.cost)} | ${m(p.selfHosted)} | ${m(p.ghIssues)} | ${m(p.ghProjects)} | ${m(p.prs)} | ${m(p.shell)} | ${m(p.multi)} | ${m(p.mobile)}<br><sub>${esc(p.mobile.note)}</sub> | ${esc(p.agents)} | ${esc(p.verdict)} |\n`;
 });
 
 const footer = `
