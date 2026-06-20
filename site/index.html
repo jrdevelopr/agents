@@ -119,6 +119,10 @@
   .search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--txt);
     border-radius:10px;padding:9px 13px;font-size:14px;outline:none}
   .search input:focus{border-color:#3b5680}
+  .resetf{cursor:pointer;border:1px solid var(--paid);background:transparent;color:var(--paid);
+    padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700;white-space:nowrap;transition:.15s}
+  .resetf:hover{background:rgba(225,29,72,.09);transform:translateY(-1px)}
+  .resetf[hidden]{display:none}
 
   /* legend */
   .legend{display:flex;flex-wrap:wrap;gap:16px;color:var(--mut);font-size:13px;margin:6px 0 18px;align-items:center}
@@ -251,7 +255,7 @@
 </nav>
 <div class="wrap" id="top">
   <header class="hero">
-    <span class="eyebrow"><span class="dot"></span> Updated June 20, 2026 · live comparison</span>
+    <span class="eyebrow"><span class="dot"></span> Updated June 20, 2026 · live comparison · <b id="pcount" style="color:var(--txt);font-weight:700;letter-spacing:.08em"></b></span>
     <h1>The open index of <span class="g">self-hosted AI agent platforms</span></h1>
     <p class="sub">One window for everything — open an interactive shell, pull a GitHub issue, run any agent CLI, ship a PR. Ranked by how well each tool delivers a <b>single integrated workflow</b> (no jumping to a separate terminal), with first-class GitHub sync and freedom to mix models, logins &amp; devices.</p>
 
@@ -265,8 +269,11 @@
   </header>
 
   <div class="bar">
-    <div style="color:var(--mut);font-size:13px">↑ Click a tile to filter · click any <b style="color:var(--txt);font-weight:600">row</b> to expand its full detail</div>
-    <div class="search"><input id="q" type="search" placeholder="Search platforms…" /></div>
+    <div style="color:var(--mut);font-size:13px">↑ Stack any tiles/chips to filter (match&nbsp;any) · click a <b style="color:var(--txt);font-weight:600">row</b> to expand its full detail</div>
+    <div style="display:flex;gap:10px;align-items:center;flex:1;justify-content:flex-end;flex-wrap:wrap">
+      <button id="resetF" class="resetf" hidden>✕ Clear filters</button>
+      <div class="search"><input id="q" type="search" placeholder="Search platforms…" /></div>
+    </div>
   </div>
 
   <div class="legend">
@@ -443,67 +450,78 @@ cardsEl.addEventListener('click',e=>{ if(e.target.closest('a'))return; const hea
   if(willOpen){card.classList.add('open');if(det)det.hidden=false;} });
 
 const FILTERS={
-  all:()=>true,
-  free:p=>p.cost.t!=='paid',
+  free:p=>p.cost.t==='free',
   paid:p=>p.cost.t==='paid',
+  hybrid:p=>p.cost.t==='hybrid',
   selfhosted:p=>p.selfHosted&&p.selfHosted.s==='yes',
-  mobile:p=>p.mobile&&p.mobile.s==='yes',
-  desktop:p=>p.desktop&&p.desktop.s==='yes',
   shell:p=>p.shell.s==='yes',
   github:p=>p.ghIssues.s==='yes'||p.prs.s==='yes',
+  logins:p=>p.multi&&p.multi.s==='yes',
+  mobile:p=>p.mobile&&p.mobile.s==='yes',
+  desktop:p=>p.desktop&&p.desktop.s==='yes',
   beyond:p=>p.agentsBeyond==='yes'
 };
-let curFilter='all',curQ='';
+const active=new Set();   // multi-select; combined with OR (match ANY)
+let curQ='';
+function matchActive(p){ for(const f of active){ const fn=FILTERS[f]; if(fn&&fn(p))return true; } return false; }
 function apply(){
-  const f=FILTERS[curFilter]||FILTERS.all;
   const list=PLATFORMS.filter(p=>{
-    if(!f(p))return false;
-    if(curQ&&!(p.name+' '+p.agents+' '+p.verdict+' '+(p.mobile.note||'')+' '+p.deploy).toLowerCase().includes(curQ))return false;
+    if(active.size && !matchActive(p))return false;
+    if(curQ && !(p.name+' '+p.agents+' '+p.verdict+' '+(p.mobile.note||'')+' '+p.deploy).toLowerCase().includes(curQ))return false;
     return true;
   });
-  render(list);
+  render(list); updateFilterUI();
 }
-function setFilter(f){
-  curFilter=f;
-  document.querySelectorAll('[data-f]').forEach(x=>x.classList.toggle('on',x.dataset.f===f));
-  apply();
+function updateFilterUI(){
+  document.querySelectorAll('[data-f]').forEach(x=>x.classList.toggle('on',active.has(x.dataset.f)));
+  const r=document.getElementById('resetF'); if(r)r.hidden=active.size===0;
 }
+function syncUrl(){ try{const u=new URL(location.href);
+  if(active.size)u.searchParams.set('f',[...active].join(',')); else u.searchParams.delete('f');
+  history.replaceState(null,'',u.pathname+u.search);}catch(e){} }
+function toggleFilter(f){ if(!f)return; active.has(f)?active.delete(f):active.add(f); syncUrl(); apply(); }
+function clearFilters(){ active.clear(); syncUrl(); apply(); }
 document.getElementById('q').addEventListener('input',e=>{curQ=e.target.value.trim().toLowerCase();apply();});
+document.getElementById('resetF').addEventListener('click',clearFilters);
 
-// oblong clickable filter tiles (with live counts + icons)
+// oblong clickable filter tiles (live counts + icons) — stack as many as you like (OR)
 const ICN={
-  all:'<circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/>',
   free:'<path d="M20 7H4V5h16zM3 7v13h18V7M9 11h6"/>',
   paid:'<path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>',
+  hybrid:'<path d="M17.5 19a4.5 4.5 0 00.5-9 6 6 0 00-11.6 1.5A3.5 3.5 0 006.5 19z"/>',
   selfhosted:'<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+  shell:'<rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/>',
+  github:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><circle cx="18" cy="6" r="3"/><path d="M18 9a9 9 0 01-9 9"/>',
+  logins:'<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/>',
   mobile:'<rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 19h2"/>',
   desktop:'<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'
 };
-function ico(k){return `<span class="fic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${ICN[k]}</svg></span>`;}
+function ico(k){return `<span class="fic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICN[k]}</svg></span>`;}
 (function(){
   const n=f=>PLATFORMS.filter(FILTERS[f]).length;
   const tiles=[
-    ['all',n('all'),'platforms compared'],
-    ['free',n('free'),'free / open-source'],
-    ['paid',n('paid'),'paid'],
-    ['selfhosted',n('selfhosted'),'self-hosted'],
-    ['mobile',n('mobile'),'with mobile app'],
-    ['desktop',n('desktop'),'with desktop app']
+    ['free','free / open-source'],['paid','paid'],['hybrid','OSS + cloud'],
+    ['selfhosted','self-hosted'],['shell','one-click shell'],['github','GitHub sync'],
+    ['logins','multi-login'],['mobile','mobile app'],['desktop','desktop app']
   ];
   const stats=document.getElementById('stats');
-  stats.innerHTML=tiles.map(([f,c,l])=>
-    `<div class="stat${f==='all'?' on':''}" data-f="${f}">${ico(f)}<b>${c}</b><span>${l}</span></div>`).join('');
-  stats.addEventListener('click',e=>{const t=e.target.closest('[data-f]');if(t)setFilter(t.dataset.f===curFilter&&t.dataset.f!=='all'?'all':t.dataset.f);});
+  stats.innerHTML=tiles.map(([f,l])=>
+    `<div class="stat" data-f="${f}">${ico(f)}<b>${n(f)}</b><span>${l}</span></div>`).join('');
+  stats.addEventListener('click',e=>{const t=e.target.closest('[data-f]');if(t)toggleFilter(t.dataset.f);});
 })();
 
 // clickable capability chips (hero "must" badges): shell · GitHub · beyond Claude/Codex · mobile
 document.querySelectorAll('.musts .must').forEach((m,i)=>{
   const f=['shell','github','beyond','mobile'][i]; if(!f)return;
-  m.dataset.f=f; m.title='Click to filter';
-  m.addEventListener('click',()=>setFilter(curFilter===f?'all':f));
+  m.dataset.f=f; m.title='Click to filter (combine with the tiles)';
+  m.addEventListener('click',()=>toggleFilter(f));
 });
 
-render(PLATFORMS);
+// running platform count (auto from data) + restore any filters from the URL
+document.getElementById('pcount').textContent=PLATFORMS.length+' platforms';
+(function(){ try{const fp=new URL(location.href).searchParams.get('f');
+  if(fp)fp.split(',').forEach(f=>{if(FILTERS[f])active.add(f);}); }catch(e){} })();
+apply();
 
 // toast helper
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
