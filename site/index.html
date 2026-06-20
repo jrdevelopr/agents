@@ -126,12 +126,12 @@
   .mk-p{background:rgba(245,166,35,.15);color:var(--part)}
   .mk-n{background:rgba(82,91,110,.18);color:var(--no)}
 
-  /* table */
+  /* table — compact spreadsheet rows; click a row to expand its detail */
   .tablecard{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:visible}
   .scroll{overflow:visible}
-  table{border-collapse:separate;border-spacing:0;width:100%;min-width:1180px}
+  table{border-collapse:separate;border-spacing:0;width:100%;min-width:840px}
   thead th{position:sticky;top:60px;z-index:3;background:var(--thead);color:var(--thtxt);font-size:11px;
-    letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:9px 7px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:10px 7px;font-weight:700;
     border-bottom:2px solid var(--thline);white-space:nowrap;box-shadow:0 5px 7px -5px rgba(0,0,0,.20)}
   th .hh{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--thtxt)}
   th .hh svg{opacity:.9}
@@ -139,25 +139,40 @@
   th .hhl{display:inline-flex;align-items:center;gap:6px;color:var(--thtxt)}
   th .hhl svg{flex:0 0 auto;opacity:.9}
   thead th.l{text-align:left}
-  tbody td{padding:11px 8px;border-bottom:1px solid var(--line);vertical-align:top;text-align:center}
-  tbody tr:last-child td{border-bottom:none}
-  tbody tr:hover td{background:var(--panel2)}
-  /* sticky first columns */
-  .c-rank{width:42px}
-  th.c-name,td.c-name{position:sticky;left:0;z-index:2;background:var(--panel);text-align:left;
-    min-width:168px;border-right:1px solid var(--line)}
-  tbody tr:hover td.c-name{background:var(--panel2)}
-  thead th.c-name{z-index:4;background:var(--thead)}
+  tbody td{padding:11px 8px;vertical-align:middle;text-align:center}
+  .c-exp{width:30px;padding-left:12px!important}
+  .c-rank{width:40px}
+  th.c-name,td.c-name{text-align:left;min-width:184px}
+  .vshort{text-align:left;min-width:230px;color:var(--txt);font-size:11.8px;line-height:1.4;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+  /* expandable rows */
+  .prow{cursor:pointer}
+  .prow>td{border-bottom:1px solid var(--line);transition:background .12s}
+  .prow:hover>td,.prow.open>td,.prow:focus-visible>td{background:var(--panel2)}
+  .prow:focus{outline:none}
+  .chev{display:inline-flex;color:var(--mut2);transition:transform .18s}
+  .prow.open .chev,.card.open .cchev{transform:rotate(90deg);color:var(--accentB)}
+  .drow>td{padding:0;border-bottom:1px solid var(--line)}
+  .detail{padding:15px 20px 17px;background:var(--panel2)}
+  .dcaps{display:grid;grid-template-columns:repeat(auto-fill,minmax(208px,1fr));gap:9px 16px}
+  .dchip{display:flex;gap:9px;align-items:flex-start}
+  .dchip .dcl{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .dlbl{font-size:10.5px;font-weight:800;color:var(--txt);text-transform:uppercase;letter-spacing:.03em}
+  .dn{font-size:11px;color:var(--mut);line-height:1.34}
+  .dn.dnm{color:var(--mut2)}
+  .dblocks{display:grid;grid-template-columns:1fr 1fr;gap:11px 24px;margin-top:14px;padding-top:13px;
+    border-top:1px dashed var(--line)}
+  .dblock.wide{grid-column:1/-1}
+  .dblock h4{margin:0 0 3px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut2);font-weight:800}
+  .dblock p{margin:0;font-size:12.5px;color:var(--txt);line-height:1.5}
+  .cnt{color:var(--accentB);font-size:11px;font-weight:700}
 
   .rank{font-weight:800;color:var(--mut2);font-variant-numeric:tabular-nums}
-  .rank.top{color:var(--accentA)}
   .pname{font-weight:700;font-size:14px;color:var(--txt);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
   .plink{font-size:12px;color:var(--mut);display:inline-flex;align-items:center;gap:4px;margin-top:3px}
-  .badge{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-    padding:3px 7px;border-radius:6px;white-space:nowrap}
-  .b-lab{background:rgba(110,231,183,.14);color:var(--accentA);border:1px solid rgba(110,231,183,.3)}
   .stars{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--mut);
-    background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;
+    background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:1px 6px;
     font-variant-numeric:tabular-nums;white-space:nowrap}
   .stars .st{color:#f5b301;font-size:11px;line-height:1}
   .stars.none{color:var(--mut2);font-weight:600}
@@ -168,47 +183,42 @@
   .ct.hybrid{background:rgba(91,157,255,.13);color:var(--hybrid)}
   .ct.paid{background:rgba(251,113,133,.14);color:var(--paid)}
   .cprice{font-size:11px;color:var(--mut2)}
-
-  .cell{display:inline-flex;flex-direction:column;align-items:center;gap:3px}
-  .cnote{font-size:10px;color:var(--mut2);max-width:118px;line-height:1.3}
-  .agents{text-align:left;min-width:118px;color:var(--txt);font-size:12px}
-  .agents .cnt{font-size:10.5px;color:var(--accentB);font-weight:700}
-  .deploy{text-align:left;min-width:108px;color:var(--mut);font-size:11.5px;line-height:1.38}
-  .verdict{text-align:left;min-width:165px;color:var(--txt);font-size:11.7px;line-height:1.42}
   .mark{width:21px;height:21px}
 
   footer{color:var(--mut);font-size:13px;padding:34px 0 60px;line-height:1.7}
   footer .src{color:var(--mut2);font-size:12px}
   .hr{height:1px;background:var(--line);margin:30px 0}
 
-  /* mobile / tablet card view (table is hidden below 1220px) */
+  /* mobile / tablet card view — collapsible to mirror the table accordion */
   .cards{display:none;gap:12px;margin-top:6px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 15px}
-  .crow1{display:flex;align-items:center;gap:11px}
-  .crank{font-weight:800;color:var(--mut2);font-size:15px;font-variant-numeric:tabular-nums;min-width:22px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 15px 14px}
+  .chead{display:flex;align-items:center;gap:11px;cursor:pointer}
+  .crank{font-weight:800;color:var(--mut2);font-size:15px;font-variant-numeric:tabular-nums;min-width:20px}
   .cmain{flex:1;min-width:0}
-  .cnm{font-weight:800;color:var(--txt);font-size:16px}
+  .cnm{font-weight:800;color:var(--txt);font-size:16px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
   .clink{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--mut);margin-top:1px}
   .cbadge{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:5px 10px;border-radius:8px;white-space:nowrap}
   .cbadge.free{background:rgba(52,211,153,.13);color:var(--free)}
   .cbadge.hybrid{background:rgba(91,157,255,.13);color:var(--hybrid)}
   .cbadge.paid{background:rgba(251,113,133,.14);color:var(--paid)}
+  .cchev{flex:0 0 auto}
   .ccaps{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 0}
   .cap{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--txt);
     background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
   .cap .m{font-weight:800}.cap .m.y{color:var(--yes)}.cap .m.p{color:var(--part)}.cap .m.n{color:var(--no)}
+  .cvd{margin-top:10px;font-size:12.5px;color:var(--mut);line-height:1.45}
+  .cdetail{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
   .cag{margin-top:11px;font-size:13px;color:var(--txt)}
-  .cag .cnt{color:var(--accentB);font-size:11.5px;font-weight:700;margin-left:4px}
-  .cvd{margin-top:9px;font-size:12.5px;color:var(--mut);line-height:1.45}
+  .cag .cnt{margin-left:4px}
+  .cdep{margin-top:9px;font-size:12px;color:var(--mut);line-height:1.4}
+  .cdep b{color:var(--txt)}
 
-  @media(max-width:1219px){ .tablecard{display:none} .cards{display:grid} }
-  @media(min-width:760px) and (max-width:1219px){ .cards{grid-template-columns:1fr 1fr} }
-  @media(max-width:759px){
+  @media(max-width:899px){ .tablecard{display:none} .cards{display:grid} }
+  @media(min-width:600px) and (max-width:899px){ .cards{grid-template-columns:1fr 1fr} }
+  @media(max-width:599px){
     header.hero{padding:34px 0 18px}
     .must{font-size:12.5px;padding:8px 11px}
     .legend{display:none}
-    .cap.more{display:none}
-    .cvd{display:none}
   }
 </style>
 </head>
@@ -252,7 +262,7 @@
   </header>
 
   <div class="bar">
-    <div style="color:var(--mut);font-size:13px">↑ Click any tile or capability chip to filter</div>
+    <div style="color:var(--mut);font-size:13px">↑ Click a tile to filter · click any <b style="color:var(--txt);font-weight:600">row</b> to expand its full detail</div>
     <div class="search"><input id="q" type="search" placeholder="Search platforms…" /></div>
   </div>
 
@@ -270,19 +280,15 @@
       <table>
         <thead>
           <tr>
+            <th class="c-exp" aria-hidden="true"></th>
             <th class="c-rank">#</th>
             <th class="c-name l" title="Platform name + current GitHub stars (popularity)">Platform <span style="opacity:.65;font-weight:600;text-transform:none;letter-spacing:0">· ★ stars</span></th>
             <th title="Cost / license"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Cost</span></span></th>
             <th title="Self-hosted — runs entirely on your own machines, not their servers"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg><span>Self-host</span></span></th>
-            <th title="GitHub Issues — two-way sync"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-1.8c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 .1.8 1.2.8 1.2.6-1.6 2.6-1.6 2.9-1.2.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg><span>Issues</span></span></th>
-            <th title="GitHub Projects board sync"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="4.5" height="16" rx="1"/><rect x="9.75" y="4" width="4.5" height="11" rx="1"/><rect x="16.5" y="4" width="4.5" height="7" rx="1"/></svg><span>Projects</span></span></th>
-            <th title="Pull requests / push to GitHub"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><circle cx="18" cy="6" r="3"/><path d="M18 9a9 9 0 01-9 9"/></svg><span>PRs</span></span></th>
             <th title="One-click human shell — integrated interactive terminal"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg><span>Shell</span></span></th>
-            <th class="l" title="Agents / models supported"><span class="hhl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4.5" y="8" width="15" height="11" rx="2.5"/><path d="M12 8V5.5"/><circle cx="12" cy="4" r="1.6"/><path d="M9.5 13h.01M14.5 13h.01M9.5 16h5"/><path d="M2.5 12v3M21.5 12v3"/></svg>Agents / models</span></th>
-            <th title="Multiple logins — isolate separate subscriptions/accounts per project"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg><span>Logins</span></span></th>
+            <th title="GitHub Issues — two-way sync"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-1.8c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 .1.8 1.2.8 1.2.6-1.6 2.6-1.6 2.9-1.2.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg><span>GitHub</span></span></th>
             <th title="Mobile — native app or mobile-web access"><span class="hh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 19h2"/></svg><span>Mobile</span></span></th>
-            <th class="l" title="Deployment / fleet — how &amp; where it runs across machines"><span class="hhl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="12" rx="2"/><path d="M9 20h6M12 16v4"/></svg>Deploy / fleet</span></th>
-            <th class="l" title="Bottom line — the verdict / summary"><span class="hhl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15a0 0 0 01 0 0H5a0 0 0 01 0 0V3z"/><path d="M15 3v4h4M8.5 12h7M8.5 16h5"/></svg>Bottom line</span></th>
+            <th class="l" title="Bottom line — what users say (click a row for full detail)"><span class="hhl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15a0 0 0 01 0 0H5a0 0 0 01 0 0V3z"/><path d="M15 3v4h4M8.5 12h7M8.5 16h5"/></svg>Bottom line</span></th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
@@ -353,43 +359,86 @@ function starsEl(p){
   if(p.stars==null) return '<span class="stars none" title="No public repo — proprietary / closed-source">— ☆</span>';
   return `<span class="stars" title="${p.stars.toLocaleString()} GitHub stars"><span class="st">★</span>${fmtStars(p.stars)}</span>`;
 }
+function markSym(cell){const [cls,sym]=MK[(cell||{s:'no'}).s]||MK.no;return `<span class="mark ${cls}">${sym}</span>`;}
+const CHEV='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+const EXT='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>';
+function dchip(label,cell){
+  const [cls,sym]=MK[(cell||{s:'no'}).s]||MK.no;
+  const note=cell&&cell.note?`<span class="dn">${cell.note}</span>`:'<span class="dn dnm">—</span>';
+  return `<div class="dchip"><span class="mark ${cls}" style="width:19px;height:19px">${sym}</span><div class="dcl"><span class="dlbl">${label}</span>${note}</div></div>`;
+}
+function detailHTML(p){
+  const ab=p.agentsBeyond==='no'?'<span class="mark mk-n" style="width:16px;height:16px;display:inline-flex">–</span> '
+    :p.agentsBeyond==='partial'?'<span class="mark mk-p" style="width:16px;height:16px;display:inline-flex">~</span> ':'';
+  return `<div class="detail">
+    <div class="dcaps">
+      ${dchip('Self-hosted',p.selfHosted)}${dchip('GitHub Issues',p.ghIssues)}${dchip('GitHub Projects',p.ghProjects)}${dchip('PRs / push',p.prs)}${dchip('One-click shell',p.shell)}${dchip('Multiple logins',p.multi)}${dchip('Mobile',p.mobile)}${dchip('Desktop app',p.desktop)}
+    </div>
+    <div class="dblocks">
+      <div class="dblock"><h4>Agents / models</h4><p>${ab}${p.agents} <span class="cnt">${p.agentsCnt}</span></p></div>
+      <div class="dblock"><h4>Deploy / fleet</h4><p>${p.deploy}</p></div>
+      <div class="dblock wide"><h4>Bottom line — what users say</h4><p>${p.verdict}</p></div>
+    </div>
+  </div>`;
+}
 function render(list){
   const rows=list.map((p)=>{
-    const realRank=PLATFORMS.indexOf(p)+1;
-    const ab=p.agentsBeyond==='no'?'<span class="mark mk-n" style="width:17px;height:17px;display:inline-flex">–</span> '
-      :p.agentsBeyond==='partial'?'<span class="mark mk-p" style="width:17px;height:17px;display:inline-flex">~</span> ':'';
-    return `<tr>
-      <td class="c-rank"><span class="rank">${realRank}</span></td>
+    const i=PLATFORMS.indexOf(p);
+    return `<tr class="prow" data-i="${i}" tabindex="0" role="button" aria-expanded="false">
+      <td class="c-exp"><span class="chev">${CHEV}</span></td>
+      <td class="c-rank"><span class="rank">${i+1}</span></td>
       <td class="c-name"><div class="pname">${p.name} ${starsEl(p)}</div>
-        <a class="plink" href="${p.url}" target="_blank" rel="noopener">${p.link}
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg></a></td>
+        <a class="plink" href="${p.url}" target="_blank" rel="noopener">${p.link} ${EXT}</a></td>
       <td>${costCell(p.cost)}</td>
-      <td>${mark(p.selfHosted)}</td>
-      <td>${mark(p.ghIssues)}</td>
-      <td>${mark(p.ghProjects)}</td>
-      <td>${mark(p.prs)}</td>
-      <td>${mark(p.shell)}</td>
-      <td class="agents">${ab}${p.agents}<div class="cnt">${p.agentsCnt}</div></td>
-      <td>${mark(p.multi)}</td>
-      <td>${mark(p.mobile)}</td>
-      <td class="deploy">${p.deploy}</td>
-      <td class="verdict">${p.verdict}</td>
-    </tr>`;
+      <td>${markSym(p.selfHosted)}</td>
+      <td>${markSym(p.shell)}</td>
+      <td>${markSym(p.ghIssues)}</td>
+      <td>${markSym(p.mobile)}</td>
+      <td class="vshort">${p.verdict}</td>
+    </tr>
+    <tr class="drow" hidden><td class="c-detail" colspan="9">${detailHTML(p)}</td></tr>`;
   }).join('');
   document.getElementById('rows').innerHTML=rows;
-  // card view (tablet / mobile)
+  // card view (tablet / mobile) — collapsible to match the table accordion
   const cm=c=>({yes:['y','✓'],partial:['p','~'],no:['n','–']}[(c||{s:'no'}).s]||['n','–']);
-  const cap=(label,cell,more)=>{const a=cm(cell);return `<span class="cap${more?' more':''}"><span class="m ${a[0]}">${a[1]}</span>${label}</span>`;};
-  document.getElementById('cards').innerHTML=list.map(p=>`<div class="card">
-      <div class="crow1"><span class="crank">${PLATFORMS.indexOf(p)+1}</span>
+  const cap=(label,cell)=>{const a=cm(cell);return `<span class="cap"><span class="m ${a[0]}">${a[1]}</span>${label}</span>`;};
+  const ab=p=>p.agentsBeyond==='no'?'<span class="mark mk-n" style="width:16px;height:16px;display:inline-flex">–</span> '
+    :p.agentsBeyond==='partial'?'<span class="mark mk-p" style="width:16px;height:16px;display:inline-flex">~</span> ':'';
+  document.getElementById('cards').innerHTML=list.map(p=>`<div class="card" data-i="${PLATFORMS.indexOf(p)}">
+      <div class="chead">
+        <span class="crank">${PLATFORMS.indexOf(p)+1}</span>
         <div class="cmain"><div class="cnm">${p.name} ${starsEl(p)}</div><a class="clink" href="${p.url}" target="_blank" rel="noopener">${p.link} ↗</a></div>
-        <span class="cbadge ${p.cost.t}">${p.cost.label}</span></div>
-      <div class="ccaps">${cap('Self-host',p.selfHosted)}${cap('Shell',p.shell)}${cap('GitHub',p.ghIssues)}${cap('Mobile',p.mobile)}${cap('PRs',p.prs,1)}${cap('Projects',p.ghProjects,1)}${cap('Logins',p.multi,1)}${cap('Desktop',p.desktop,1)}</div>
-      <div class="cag">${p.agents}<span class="cnt">${p.agentsCnt}</span></div>
+        <span class="cbadge ${p.cost.t}">${p.cost.label}</span>
+        <span class="chev cchev">${CHEV}</span></div>
+      <div class="ccaps">${cap('Self-host',p.selfHosted)}${cap('Shell',p.shell)}${cap('GitHub',p.ghIssues)}${cap('Mobile',p.mobile)}</div>
       <div class="cvd">${p.verdict}</div>
+      <div class="cdetail" hidden>
+        <div class="ccaps">${cap('PRs',p.prs)}${cap('Projects',p.ghProjects)}${cap('Logins',p.multi)}${cap('Desktop',p.desktop)}</div>
+        <div class="cag">${ab(p)}${p.agents}<span class="cnt">${p.agentsCnt}</span></div>
+        <div class="cdep"><b>Deploy:</b> ${p.deploy}</div>
+      </div>
     </div>`).join('');
   document.getElementById('count').textContent=`Showing ${list.length} of ${PLATFORMS.length} platforms.`;
 }
+
+// accordion: click/keyboard a row (or card) to expand its detail; one open at a time
+const rowsEl=document.getElementById('rows');
+function toggleRow(tr){
+  const drow=tr.nextElementSibling; if(!drow||!drow.classList.contains('drow'))return;
+  const willOpen=!tr.classList.contains('open');
+  rowsEl.querySelectorAll('.prow.open').forEach(r=>{r.classList.remove('open');r.setAttribute('aria-expanded','false');
+    const d=r.nextElementSibling;if(d&&d.classList.contains('drow'))d.hidden=true;});
+  if(willOpen){tr.classList.add('open');tr.setAttribute('aria-expanded','true');drow.hidden=false;}
+}
+rowsEl.addEventListener('click',e=>{ if(e.target.closest('a'))return; const tr=e.target.closest('.prow'); if(tr)toggleRow(tr); });
+rowsEl.addEventListener('keydown',e=>{ if(e.key!=='Enter'&&e.key!==' ')return; const tr=e.target.closest('.prow');
+  if(tr){e.preventDefault();toggleRow(tr);} });
+const cardsEl=document.getElementById('cards');
+cardsEl.addEventListener('click',e=>{ if(e.target.closest('a'))return; const head=e.target.closest('.chead'); if(!head)return;
+  const card=head.closest('.card'),det=card.querySelector('.cdetail'),willOpen=!card.classList.contains('open');
+  cardsEl.querySelectorAll('.card.open').forEach(c=>{c.classList.remove('open');const d=c.querySelector('.cdetail');if(d)d.hidden=true;});
+  if(willOpen){card.classList.add('open');if(det)det.hidden=false;} });
+
 const FILTERS={
   all:()=>true,
   free:p=>p.cost.t!=='paid',
