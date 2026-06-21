@@ -203,9 +203,15 @@
   .cprice{font-size:11px;color:var(--mut2);width:100%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mark{width:21px;height:21px}
 
-  footer{color:var(--mut);font-size:13px;padding:34px 0 60px;line-height:1.7}
+  footer{color:var(--mut);font-size:13px;padding:18px 22px 24px;line-height:1.6}
   footer .src{color:var(--mut2);font-size:12px}
-  .hr{height:1px;background:var(--line);margin:30px 0}
+  .hr{height:1px;background:var(--line);margin:14px 0}
+  .fnav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:16px;padding-top:14px;
+    border-top:1px solid var(--line);font-size:12.5px}
+  .fnav a{color:var(--mut);font-weight:600}
+  .fnav a:hover{color:var(--accentB)}
+  .fnav .sep{color:var(--mut2);opacity:.5}
+  .fnav .copy{color:var(--mut2);margin-left:auto}
 
   /* mobile / tablet card view — collapsible to mirror the table accordion */
   .cards{display:none;gap:12px;margin-top:6px}
@@ -345,6 +351,14 @@
     <p><b style="color:var(--txt)">How to read this.</b> Platforms are <b style="color:var(--txt)">listed alphabetically</b> — no personal ranking; click any row to expand its full detail, and use the tiles to filter. <b style="color:var(--txt)">★ stars</b> next to each name are current GitHub stargazers (a rough popularity signal); closed-source products show <span class="stars none" style="font-size:10px">— ☆</span>. The <b style="color:var(--txt)">Bottom line</b> is a neutral summary of real user sentiment (from Reddit, Hacker News, GitHub &amp; reviews — praise + main gripe), refreshed periodically; very new tools are flagged as having little feedback yet. “Multiple logins” = isolate separate Claude/agent subscriptions per project. <b style="color:var(--txt)">Self-hosted</b> ✓ = runs entirely on your own machines (not the vendor's servers) — free-but-cloud-only scores ➖/~. <b style="color:var(--txt)">Mobile</b>: <span class="mark mk-y" style="width:18px;height:18px">✓</span> dedicated app or mobile-first · <span class="mark mk-p" style="width:18px;height:18px">~</span> usable from a mobile browser, no native app · <span class="mark mk-n" style="width:18px;height:18px">–</span> desktop / SSH only.</p>
     <div class="hr"></div>
     <p class="src">Capabilities from official docs &amp; repos checked June 20, 2026; GitHub stars &amp; user sentiment sampled the same week (both move — treat as a snapshot). “–”/“~” used instead of guessing. Projects = the platform's own project/task board or PM-tool integration (Linear, Jira, GitHub Projects). Prices are list-price estimates — verify before buying. Independent comparison, free to share — <a href="https://github.com/jrdevelopr/awesome-agent-platforms" target="_blank" rel="noopener">source &amp; data on GitHub</a>. <span id="count"></span></p>
+    <nav class="fnav">
+      <a href="/privacy.html">Privacy Policy</a>
+      <span class="sep">·</span>
+      <a href="https://github.com/jrdevelopr/awesome-agent-platforms" target="_blank" rel="noopener">GitHub</a>
+      <span class="sep">·</span>
+      <a href="https://github.com/jrdevelopr/awesome-agent-platforms/issues/new?title=Suggest%20a%20platform:%20" target="_blank" rel="noopener">Suggest a platform</a>
+      <span class="copy">© 2026 Awesome Agent Platforms · MIT</span>
+    </nav>
   </footer>
 </div>
 <div class="toast" id="toast"></div>
