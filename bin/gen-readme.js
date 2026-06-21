@@ -74,7 +74,7 @@ The table is generated from the data in **[\`site/index.html\`](site/index.html)
 array). A weekly bot scans curated lists of new agent platforms, adds any that are missing, re-ranks,
 and regenerates both the live site and this README — so they never drift.
 
-**Suggest a platform:** [open an issue](https://github.com/jrdevelopr/awesome-agent-platforms/issues/new?title=Suggest%20a%20platform:%20).
+**Suggest a platform:** [open an issue](https://github.com/jrdevelopr/awesome-ai-builders-toolkit/issues/new?title=Suggest%20a%20platform:%20).
 
 <sub>Ratings are based on official docs/repos; “➖”/“🟡” are used instead of guessing. Projects = the platform's own
 project/task board or PM-tool integration (Linear, Jira, GitHub Projects). Prices are list-price estimates and change often — verify before buying.
