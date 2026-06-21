@@ -16,7 +16,7 @@ function tryFetch(url,out){
     execSync(`curl -fsSL --max-time 18 -A "Mozilla/5.0" -o "${out}" "${url}"`,{stdio:'ignore'});
     const sz=fs.statSync(out).size;
     const mime=execSync(`file -b --mime-type "${out}"`,{encoding:'utf8'}).trim();
-    if(sz>120 && IMG.has(mime)) return true;
+    if(sz>500 && IMG.has(mime)) return true;   // >500b rejects tiny blank favicons
   }catch(e){}
   try{fs.unlinkSync(out);}catch(e){}
   return false;
@@ -44,6 +44,7 @@ function svgTile(name){
 let fetched=0, svg=0;
 for(const p of arr){
   const s=slug(p.name);
+  if(p.icon && fs.existsSync(path.join(ROOT,'site',p.icon))){ console.log(`  ${p.name.padEnd(14)} -> keep ${p.icon}`); continue; } // don't clobber good/manual icons
   let saved=null;
   for(const url of candidates(p)){
     const ext = url.includes('.png')||url.includes('github.com')?'png':'ico';
