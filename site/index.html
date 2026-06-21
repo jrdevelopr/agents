@@ -163,18 +163,17 @@
   .prow:focus{outline:none}
   .chev{display:inline-flex;color:var(--mut2);transition:transform .18s}
   .prow.open .chev,.card.open .cchev{transform:rotate(90deg);color:var(--accentB)}
-  /* expanded detail — (1) "Users say" on the left + per-column notes aligned under each column */
-  .drow-notes>td{background:var(--panel2);vertical-align:top;border-bottom:none;padding:2px 6px 4px}
-  .userssay{vertical-align:top;text-align:left;padding:2px 18px 6px 12px}
+  /* expanded detail — Summary + "Users say" toggle on the left, per-column notes under each column */
+  .drow-notes>td{background:var(--panel2);vertical-align:top;border-bottom:1px solid var(--line);padding:2px 6px 7px}
+  .userssay{vertical-align:top;text-align:left;padding:2px 18px 8px 12px}
   .ussay p{margin:0;font-size:11px;color:var(--mut);line-height:1.46;font-weight:400}
+  .us-toggle{cursor:pointer;border:none;background:none;color:var(--accentB);font-size:10.5px;font-weight:700;padding:0 0 0 4px;white-space:nowrap}
+  .us-toggle:hover{text-decoration:underline}
+  .us-toggle.on{color:var(--mut)}
+  .us-body{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);font-size:10.5px;color:var(--mut2);line-height:1.45;font-style:italic}
   .dncell{text-align:center}
   .dntext{font-size:10.3px;line-height:1.32;color:var(--mut)}
   .dndash{color:var(--mut2);opacity:.4}
-  /* (2) neutral overall summary — untitled, faint divider above */
-  .drow-sum>td{background:var(--panel2);padding:0 0 16px;border-bottom:1px solid var(--line)}
-  .dsum{margin:4px 20px 0;padding-top:13px;border-top:1px dashed var(--line)}
-  .dsumh{font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--accentB);font-weight:800;text-align:center;margin-bottom:3px}
-  .dsumtext{margin:0;font-size:12.5px;color:var(--txt);line-height:1.55;text-align:center;max-width:1000px;margin-left:auto;margin-right:auto}
   .cnt{color:var(--accentB);font-size:11px;font-weight:700}
 
   .rank{font-weight:800;color:var(--mut2);font-variant-numeric:tabular-nums}
@@ -439,16 +438,12 @@ function detailRows(p){
     :p.agentsBeyond==='partial'?'<span class="mark mk-p" style="width:16px;height:16px;display:inline-flex">~</span> ':'';
   // (1) per-column notes — each sits directly under its capability column
   const notes=`<tr class="drow drow-notes" hidden>
-    <td class="userssay" colspan="3"><div class="ussay"><p>${p.summary}</p></div></td>
+    <td class="userssay" colspan="3"><div class="ussay"><p>${p.summary} <button class="us-toggle" type="button">Users say ▾</button></p><div class="us-body" hidden>${p.verdict}</div></div></td>
     <td class="dncell costdetail"><span class="dntext">${p.cost.price}</span></td>
     <td class="dncell mdldetail">${modelsDetail(p)}</td>
     ${noteTd(p.selfHosted)}<td class="dncell"><span class="dntext">${p.deploy}</span></td>${noteTd(p.ghIssues)}${noteTd(p.ghProjects)}${noteTd(p.prs)}${noteTd(p.shell)}${noteTd(p.mobile)}${noteTd(p.desktop)}
   </tr>`;
-  // (2) neutral overall summary (no title, faint divider above) — kept user-free
-  const summary=`<tr class="drow drow-sum" hidden><td colspan="13"><div class="dsum">
-    <div class="dsumh">Users say</div><p class="dsumtext">${p.verdict}</p>
-  </div></td></tr>`;
-  return notes+summary;
+  return notes;
 }
 function render(list){
   const rows=list.map((p,idx)=>{
@@ -509,6 +504,8 @@ function toggleRow(tr){
 }
 rowsEl.addEventListener('click',e=>{
   if(e.target.closest('a'))return;                      // let the "full list" link through
+  const ut=e.target.closest('.us-toggle');              // "Users say" nested accordion
+  if(ut){ const b=ut.closest('.ussay').querySelector('.us-body'); const show=b.hidden; b.hidden=!show; ut.classList.toggle('on',show); return; }
   const tr=e.target.closest('.prow'); if(tr)toggleRow(tr); });
 rowsEl.addEventListener('keydown',e=>{ if(e.key!=='Enter'&&e.key!==' ')return; const tr=e.target.closest('.prow');
   if(tr){e.preventDefault();toggleRow(tr);} });
