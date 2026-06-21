@@ -32,7 +32,7 @@
     --accentA:#0d9488; --accentB:#2563eb; --accentC:#7c3aed;
     --paid:#e11d48; --free:#0e9f6e; --hybrid:#2563eb;
     --chip:#eef2f9; --glow:#dce7ff; --thead:#dde6f4; --thtxt:#3a4a64; --thline:#bccbe2; --barbg:rgba(255,255,255,.8);
-    --zebra:rgba(18,30,52,.04);
+    --zebra:rgba(18,30,52,.04); --rowhover:rgba(37,99,235,.13);
   }
   :root[data-theme="dark"]{
     --bg:#0a0d14; --panel:#10141f; --panel2:#141a27; --line:#222a3a;
@@ -41,7 +41,7 @@
     --accentA:#6ee7b7; --accentB:#5b9dff; --accentC:#c084fc;
     --paid:#fb7185; --free:#34d399; --hybrid:#5b9dff;
     --chip:#1a2233; --glow:#16203a; --thead:#1d2638; --thtxt:#b6c2d8; --thline:#36456180; --barbg:rgba(10,13,20,.74);
-    --zebra:rgba(255,255,255,.035);
+    --zebra:rgba(255,255,255,.035); --rowhover:rgba(91,157,255,.16);
   }
   html{transition:background .25s}
   *{box-sizing:border-box}
@@ -159,7 +159,7 @@
   .prow{cursor:pointer}
   .prow>td{border-bottom:1px solid var(--line);transition:background .12s}
   .prow.alt>td{background:var(--zebra)}
-  .prow:hover>td,.prow.open>td,.prow:focus-visible>td{background:var(--panel2)}
+  .prow:hover>td,.prow.open>td,.prow:focus-visible>td{background:var(--rowhover)}
   .prow:focus{outline:none}
   .chev{display:inline-flex;color:var(--mut2);transition:transform .18s}
   .prow.open .chev,.card.open .cchev{transform:rotate(90deg);color:var(--accentB)}
