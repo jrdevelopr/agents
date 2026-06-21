@@ -645,7 +645,10 @@ const OSNAME={mac:'macOS',win:'Windows',linux:'Linux'};
 function osCell(p){
   const os=p.os||[];
   if(!os.length) return markSym(p.desktop);   // no desktop app -> the – mark
-  return `<span class="osico" title="Desktop: ${os.map(o=>OSNAME[o]).join(', ')}">${os.map(o=>OSI[o]).join('')}</span>`;
+  // One icon is enough to signal "has a desktop app" — prefer Mac, then Windows,
+  // then whatever's first. Full OS list stays in the tooltip.
+  const pick=os.includes('mac')?'mac':os.includes('win')?'win':os[0];
+  return `<span class="osico" title="Desktop: ${os.map(o=>OSNAME[o]).join(', ')}">${OSI[pick]}</span>`;
 }
 // Mobile column shows iOS / Android / PWA(mobile-web) icons.
 const MOBI={
