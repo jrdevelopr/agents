@@ -151,7 +151,8 @@
   .c-exp{width:30px;padding-left:12px!important}
   .c-rank{width:40px}
   th.c-name,td.c-name{text-align:left;min-width:184px}
-  .vshort{text-align:left;color:var(--txt);font-size:11.8px;line-height:1.4;overflow-wrap:anywhere;
+  .vshort{text-align:left}
+  .vline{color:var(--txt);font-size:11.8px;line-height:1.4;overflow-wrap:anywhere;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
   /* expandable rows */
@@ -410,7 +411,7 @@ function render(list){
       <td>${markSym(p.shell)}</td>
       <td>${markSym(p.ghIssues)}</td>
       <td>${markSym(p.mobile)}</td>
-      <td class="vshort">${p.verdict}</td>
+      <td class="vshort"><div class="vline">${p.verdict}</div></td>
     </tr>
     <tr class="drow" hidden><td class="c-detail" colspan="9">${detailHTML(p)}</td></tr>`;
   }).join('');
