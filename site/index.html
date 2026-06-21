@@ -136,8 +136,9 @@
   .tablecard{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:visible}
   .scroll{overflow:visible}
   table{border-collapse:separate;border-spacing:0;width:100%;min-width:880px;table-layout:fixed}
-  .cg-exp{width:34px}.cg-rank{width:42px}.cg-name{width:auto}.cg-cost{width:124px}
-  .cg-m{width:60px}
+  /* Platform + Cost fixed; the mark columns share the rest equally (even spreadsheet lanes) */
+  .cg-exp{width:34px}.cg-rank{width:42px}.cg-name{width:248px}.cg-cost{width:132px}
+  .cg-m{width:auto}
   thead th{position:sticky;top:60px;z-index:3;background:var(--thead);color:var(--thtxt);font-size:11px;
     letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:10px 7px;font-weight:700;
     border-bottom:2px solid var(--thline);white-space:nowrap;box-shadow:0 5px 7px -5px rgba(0,0,0,.20)}
