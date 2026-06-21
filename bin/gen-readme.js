@@ -23,7 +23,7 @@ P.sort((a,b)=>a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 const MARK = { yes:'✅', partial:'🟡', no:'➖' };
 const esc = s => String(s == null ? '' : s).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
 const cost = c => c.t === 'paid' ? `💲 **Paid** <br><sub>${esc(c.price)}</sub>`
-              : c.t === 'hybrid' ? `OSS + Cloud <br><sub>${esc(c.price)}</sub>`
+              : c.t === 'hybrid' ? `**Freemium** <br><sub>${esc(c.price)}</sub>`
               : `Free <br><sub>${esc(c.price)}</sub>`;
 
 const header = `<!-- This file is AUTO-GENERATED from site/index.html by bin/gen-readme.js. Do not edit by hand. -->
